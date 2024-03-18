@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kwikq_app/pages/bottomnav.dart';
+import 'package:kwikq_app/pages/emailverify.dart';
+
 import 'package:kwikq_app/pages/login.dart';
 
 class SignUp extends StatefulWidget {
@@ -28,12 +29,6 @@ class _SignUpState extends State<SignUp> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
-        ScaffoldMessenger.of(context).showSnackBar((SnackBar(
-            backgroundColor: Colors.redAccent,
-            content: Text(
-              "Registered Successfully",
-              style: TextStyle(fontSize: 20.0),
-            ))));
         //    String Id = randomAlphaNumeric(10);
         Map<String, dynamic> addUserInfo = {
           "Name": namecontroller.text,
@@ -48,8 +43,8 @@ class _SignUpState extends State<SignUp> {
         //     await SharedPreferenceHelper().saveUserId(Id);
 
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => BottomNav()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => EmailVerificationScreen()));
       } on FirebaseException catch (e) {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -72,9 +67,10 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(resizeToAvoidBottomInset: false,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
-        child: Stack( 
+        child: Stack(
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
@@ -104,7 +100,6 @@ class _SignUpState extends State<SignUp> {
               margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
               child: Column(
                 children: [
-                  
                   SizedBox(
                     height: 50.0,
                   ),
