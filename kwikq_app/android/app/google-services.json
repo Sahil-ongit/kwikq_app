@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500771382613",
+    "project_id": "my-last-and-final-project",
+    "storage_bucket": "my-last-and-final-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500771382613:android:249c970fad225ce4e5fbdc",
+        "android_client_info": {
+          "package_name": "com.example.kwikq_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwjRPSC-et8PXYKwS3YglcsWjFJrG7a1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
