@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +20,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
         body: SafeArea(
             child: Container(
-                margin: EdgeInsets.only(top: 20, left: 20, right: 10),
+                margin: EdgeInsets.only(
+                  top: 20,
+                  left: 20,
+                ),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -57,27 +61,161 @@ class _HomeState extends State<Home> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
+                      SizedBox(height: 20),
                       showitem(),
                       SizedBox(
                         height: 30.0,
                       ),
-                      Row(children: [
-                        Container(
-                          child: Column(children: [
-                            Image.asset(
-                              "images/salad2.png",
-                              height: 150,
-                              width: 150,
-                              fit: BoxFit.cover,
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(4),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(20),
+                              elevation: 5.0,
+                              child: Container(
+                                padding: EdgeInsets.all(14),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Image.asset(
+                                        "images/salad2.png",
+                                        height: 150,
+                                        width: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Text(
+                                        "Veggie Taco Hash",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Fresh and Healthy",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 20, color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "\$25",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w800),
+                                      )
+                                    ]),
+                              ),
                             ),
-                            Text(
-                              "Veggie Taco Hash",
-                              style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
-                          ]),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(4),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(20),
+                              elevation: 5.0,
+                              child: Container(
+                                padding: EdgeInsets.all(14),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Image.asset(
+                                        "images/salad2.png",
+                                        height: 150,
+                                        width: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Text(
+                                        "Veggie Taco Hash",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Fresh and Healthy",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 20, color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "\$25",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w800),
+                                      )
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(margin: EdgeInsets.only(right: 10),
+                        child: Material(
+                          elevation: 5,
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'images/salad2.png',
+                                  height: 150,
+                                  width: 150,
+                                  fit: BoxFit.cover,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text(
+                                        "Mediterranean Chickpea Salad",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ),
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text(
+                                        "Honey Goot Cheese",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.grey),
+                                      ),
+                                    ),
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text(
+                                        "\$26",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ])
+                      ),
                     ]))));
   }
 
