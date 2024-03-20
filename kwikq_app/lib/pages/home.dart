@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kwikq_app/services/database.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,6 +16,35 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool icecream = false, pizza = false, salad = false, burger = false;
+
+  Stream? fooditemStream;
+  ontheload() async {
+    fooditemStream = await DatabaseMethods().getFoodItem("Icecream");
+  }
+
+  @override
+  void initState() {
+    ontheload();
+    super.initState();
+  }
+
+  Widget allItem() {
+    return StreamBuilder(
+      stream: fooditemStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: snapshot.data.docs.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {},
+              )
+            : CircularProgressIndicator();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +186,8 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(margin: EdgeInsets.only(right: 10),
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
                         child: Material(
                           elevation: 5,
                           borderRadius: BorderRadius.circular(20),
