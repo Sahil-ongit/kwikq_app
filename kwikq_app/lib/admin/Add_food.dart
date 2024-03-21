@@ -26,6 +26,7 @@ class _AddFoodState extends State<AddFood> {
     var image = await _picker.pickImage(source: ImageSource.gallery);
 
     selectedImage = File(image!.path);
+    print(selectedImage);
     setState(() {});
   }
 
@@ -33,21 +34,44 @@ class _AddFoodState extends State<AddFood> {
     if (selectedImage != null &&
         namecontroller.text != "" &&
         pricecontroller.text != "" &&
-        detailcontroller.text != "") {
+        detailcontroller.text != "" &&
+        value != null) {
+      // Ensure a category is selected
+
       String addId = randomAlphaNumeric(10);
 
       Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child("blogImages").child(addId);
-      final UploadTask task = firebaseStorageRef.putFile(selectedImage!);
+          FirebaseStorage.instance.ref().child("FoodImage").child(addId);
+          
 
-      var downloadUrl = await (await task).ref.getDownloadURL();
+      // Upload the image file to Firebase Storage
+      try {
+        await firebaseStorageRef.putFile(
+            selectedImage!, SettableMetadata(contentType: "image/jpeg"));
+      } catch (e) {
+        print("Error uploading image: $e");
+        return; // Exit function if image upload fails
+      }
 
+      // Retrieve the download URL of the uploaded image
+      String downloadUrl;
+      try {
+        downloadUrl = await firebaseStorageRef.getDownloadURL();
+        print(downloadUrl);
+      } catch (e) {
+        print("Error getting download URL: $e");
+        return; // Exit function if getting download URL fails
+      }
+
+      // Create a map containing the item details
       Map<String, dynamic> addItem = {
         "Image": downloadUrl,
         "Name": namecontroller.text,
         "Price": pricecontroller.text,
         "Detail": detailcontroller.text
       };
+
+      // Add the item to the database
       await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.orangeAccent,
@@ -74,8 +98,7 @@ class _AddFoodState extends State<AddFood> {
         centerTitle: true,
         title: Text(
           "Add Item",
-          style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
@@ -88,7 +111,7 @@ class _AddFoodState extends State<AddFood> {
               Text(
                 "Upload the Item Picture",
                 style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 20.0,
@@ -145,7 +168,7 @@ class _AddFoodState extends State<AddFood> {
               Text(
                 "Item Name",
                 style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10.0,
@@ -162,7 +185,7 @@ class _AddFoodState extends State<AddFood> {
                       border: InputBorder.none,
                       hintText: "Enter Item Name",
                       hintStyle: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               ),
               SizedBox(
@@ -171,7 +194,7 @@ class _AddFoodState extends State<AddFood> {
               Text(
                 "Item Price",
                 style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10.0,
@@ -188,7 +211,7 @@ class _AddFoodState extends State<AddFood> {
                       border: InputBorder.none,
                       hintText: "Enter Item Price",
                       hintStyle: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               ),
               SizedBox(
@@ -197,7 +220,7 @@ class _AddFoodState extends State<AddFood> {
               Text(
                 "Item Detail",
                 style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10.0,
@@ -215,7 +238,7 @@ class _AddFoodState extends State<AddFood> {
                       border: InputBorder.none,
                       hintText: "Enter Item Detail",
                       hintStyle: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               ),
               SizedBox(
@@ -223,8 +246,8 @@ class _AddFoodState extends State<AddFood> {
               ),
               Text(
                 "Select Category",
-                style:GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold) ,
+                style: GoogleFonts.poppins(
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 20.0,
@@ -263,7 +286,7 @@ class _AddFoodState extends State<AddFood> {
                 height: 30.0,
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   uploadItem();
                 },
                 child: Center(

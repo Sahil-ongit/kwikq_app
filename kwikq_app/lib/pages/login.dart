@@ -5,7 +5,6 @@ import 'package:kwikq_app/pages/bottomnav.dart';
 import 'package:kwikq_app/pages/forgotpassword.dart';
 import 'package:kwikq_app/pages/signup.dart';
 
-
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
 
@@ -36,17 +35,19 @@ class _LogInState extends State<LogIn> {
         )));
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.orangeAccent,
             content: Text(
-          "Wrong Password Provided by User",
-          style: TextStyle(fontSize: 18.0, color: Colors.black),
-        )));
+              "Wrong Password Provided by User",
+              style: TextStyle(fontSize: 18.0, color: Colors.black),
+            )));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(resizeToAvoidBottomInset: false,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         child: Stack(
           children: [
@@ -78,7 +79,6 @@ class _LogInState extends State<LogIn> {
               margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
               child: Column(
                 children: [
-                 
                   SizedBox(
                     height: 50.0,
                   ),

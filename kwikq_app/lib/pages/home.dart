@@ -1,10 +1,13 @@
+
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kwikq_app/pages/details.dart';
 import 'package:kwikq_app/services/database.dart';
 
 class Home extends StatefulWidget {
@@ -34,11 +37,64 @@ class _HomeState extends State<Home> {
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData
             ? ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: snapshot.data.docs.length,
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {},
+                padding: EdgeInsets.zero,
+                itemCount: snapshot.data.docs.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = snapshot.data.docs[index];
+                  return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Details(
+                                        detail: ds["Detail"],
+                                        image: ds["Image"],
+                                        name: ds["Name"],
+                                        price: ds["Price"]),
+                                  ));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(4),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(20),
+                                elevation: 5.0,
+                                child: Container(
+                                  padding: EdgeInsets.all(14),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Image.network(
+                                          ds["Image"],
+                                          height: 150,
+                                          width: 150,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Text(
+                                        ds["Name"],
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          "Fresh and Healthy",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20, color: Colors.grey),
+                                        ),
+                                        Text(
+                                          "\$"+ds["Price"],
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w800),
+                                        )
+                                      ]),
+                                ),
+                              ),
+                            ),
+                          );
+                },
               )
             : CircularProgressIndicator();
       },
@@ -54,200 +110,156 @@ class _HomeState extends State<Home> {
                   top: 20,
                   left: 20,
                 ),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Hello User,",
-                              style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
-                          Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(4)),
-                            child: Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
+                child: SingleChildScrollView(scrollDirection: Axis.vertical,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Hello User,",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Delicious Food",
+                          style: GoogleFonts.poppins(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Discover and Get Great Food",
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(
+                                  color: Colors.grey, letterSpacing: .5),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 20),
+                        showitem(),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        Container(height: 270,child: allItem()),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: [
+                            SizedBox(
+                              height: 20,
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Delicious Food",
-                        style: GoogleFonts.poppins(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "Discover and Get Great Food",
-                        style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                                color: Colors.grey, letterSpacing: .5),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20),
-                      showitem(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(4),
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20),
-                              elevation: 5.0,
-                              child: Container(
-                                padding: EdgeInsets.all(14),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        "images/salad2.png",
-                                        height: 150,
-                                        width: 150,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Text(
-                                        "Veggie Taco Hash",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        "Fresh and Healthy",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 20, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        "\$25",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w800),
-                                      )
-                                    ]),
+                            
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(4),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(20),
+                                elevation: 5.0,
+                                child: Container(
+                                  padding: EdgeInsets.all(14),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                          "images/salad2.png",
+                                          height: 150,
+                                          width: 150,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Text(
+                                          "Veggie Taco Hash",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          "Fresh and Healthy",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20, color: Colors.grey),
+                                        ),
+                                        Text(
+                                          "\$25",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w800),
+                                        )
+                                      ]),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(4),
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20),
-                              elevation: 5.0,
-                              child: Container(
-                                padding: EdgeInsets.all(14),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                          ]),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          
+                          child: Material(
+                            elevation: 5,
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    'images/salad3.png',
+                                    height: 150,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Column(
                                     children: [
-                                      Image.asset(
-                                        "images/salad2.png",
-                                        height: 150,
-                                        width: 150,
-                                        fit: BoxFit.cover,
+                                      SizedBox(
+                                        height: 20,
                                       ),
-                                      Text(
-                                        "Veggie Taco Hash",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width / 2,
+                                        child: Text(
+                                          "Mediterranean Chickpea Salad",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w800),
+                                        ),
                                       ),
-                                      Text(
-                                        "Fresh and Healthy",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 20, color: Colors.grey),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width / 2,
+                                        child: Text(
+                                          "Honey Goot Cheese",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w800,
+                                              color: Colors.grey),
+                                        ),
                                       ),
-                                      Text(
-                                        "\$25",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w800),
-                                      )
-                                    ]),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width / 2,
+                                        child: Text(
+                                          "\$26",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ),
-                          ),
-                        ]),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'images/salad2.png',
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text(
-                                        "Mediterranean Chickpea Salad",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                    ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text(
-                                        "Honey Goot Cheese",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w800,
-                                            color: Colors.grey),
-                                      ),
-                                    ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text(
-                                        "\$26",
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
                             ),
                           ),
                         ),
-                      ),
-                    ]))));
+                      ]),
+                ))));
   }
 
   Widget showitem() {
