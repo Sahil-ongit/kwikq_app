@@ -31,4 +31,6 @@ class DatabaseMethods {
         .collection("Cart")
         .add(userInFoMap);
   }
+
+ 
 }
