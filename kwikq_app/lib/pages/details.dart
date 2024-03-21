@@ -6,14 +6,14 @@ import 'package:kwikq_app/services/shared_pref.dart';
 class Details extends StatefulWidget {
   String image, name, detail, price;
   Details(
-    {required this.detail,
+      {required this.detail,
       required this.image,
       required this.name,
       required this.price});
-      
+
   @override
   State<Details> createState() => _DetailsState();
-}    
+}
 
 class _DetailsState extends State<Details> {
   int a = 1, total = 0;
@@ -68,9 +68,8 @@ class _DetailsState extends State<Details> {
                   children: [
                     Text(
                       widget.name,
-                      style:GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                      style: GoogleFonts.poppins(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -98,9 +97,8 @@ class _DetailsState extends State<Details> {
                 ),
                 Text(
                   a.toString(),
-                  style:GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                  style: GoogleFonts.poppins(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   width: 20.0,
@@ -129,9 +127,8 @@ class _DetailsState extends State<Details> {
             Text(
               widget.detail,
               maxLines: 4,
-              style:GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(
+                  fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 30.0,
@@ -141,8 +138,7 @@ class _DetailsState extends State<Details> {
                 Text(
                   "Delivery Time",
                   style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   width: 25.0,
@@ -156,9 +152,8 @@ class _DetailsState extends State<Details> {
                 ),
                 Text(
                   "30 min",
-                  style:GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                  style: GoogleFonts.poppins(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -173,15 +168,13 @@ class _DetailsState extends State<Details> {
                     children: [
                       Text(
                         "Total Price",
-                        style:GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                        style: GoogleFonts.poppins(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "\$" + total.toString(),
-                        style:GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                        style: GoogleFonts.poppins(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
@@ -194,12 +187,12 @@ class _DetailsState extends State<Details> {
                         "Image": widget.image
                       };
                       await DatabaseMethods().addFoodToCart(addFoodtoCart, id!);
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              backgroundColor: Colors.orangeAccent,
-              content: Text(
-                "Food Added to Cart",
-                style: TextStyle(fontSize: 18.0),
-              )));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.orangeAccent,
+                          content: Text(
+                            "Food Added to Cart",
+                            style: TextStyle(fontSize: 18.0),
+                          )));
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width / 2,

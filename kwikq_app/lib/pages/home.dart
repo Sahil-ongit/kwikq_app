@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
 
   Stream? fooditemstream;
   ontheload() async {
-    fooditemstream = await DatabaseMethods().getFoodItem("Burger");
+    fooditemstream = await DatabaseMethods().getFoodItem("Ice-cream");
     setState(() {});
   }
 
@@ -44,6 +44,17 @@ class _HomeState extends State<Home> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Details(
+                                detail: ds["Detail"],
+                                image: ds["Image"],
+                                name: ds["Name"],
+                                price: ds["Price"]),
+                          ));
+                    },
                     child: Container(
                       margin: EdgeInsets.all(4),
                       child: Material(
@@ -54,11 +65,14 @@ class _HomeState extends State<Home> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.network(
-                                  ds["Image"],
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(
+                                    ds["Image"],
+                                    height: 150,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 Text(
                                   ds["Name"],
@@ -83,6 +97,96 @@ class _HomeState extends State<Home> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ]),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              )
+            : CircularProgressIndicator();
+      },
+    );
+  }
+
+  Widget allItemsVertically() {
+    return StreamBuilder(
+      stream: fooditemstream,
+      builder: (context, AsyncSnapshot snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: snapshot.data.docs.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = snapshot.data.docs[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Details(
+                                detail: ds["Detail"],
+                                image: ds["Image"],
+                                name: ds["Name"],
+                                price: ds["Price"]),
+                          ));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: Material(
+                        elevation: 5,
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          child: SingleChildScrollView(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(
+                                    ds["Image"],
+                                    height: 150,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Column(
+                                  children: [
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text(ds["Name"],
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text("Honey goot Cheese",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 13,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text("\$" + ds["Price"],
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -123,7 +227,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 5,
                       ),
                       Text(
                         "Delicious Food",
@@ -138,67 +242,18 @@ class _HomeState extends State<Home> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Container(
                           margin: EdgeInsets.only(right: 20),
                           child: showitem()),
                       SizedBox(
-                        height: 30.0,
+                        height: 15,
                       ),
                       Container(height: 270, child: allItems()),
-                      SizedBox(height: 30),
-                      Container(
-                        child: Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  "images/salad2.png",
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  children: [
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text(
-                                          "Mediterranean Chickpea Salad",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text("Honey goot Cheese",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 13,
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text("\$50",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
+                      SizedBox(height: 9),
+                      Container(height: 270, child: allItemsVertically()),
                     ]))));
   }
 
@@ -207,11 +262,12 @@ class _HomeState extends State<Home> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             icecream = false;
             pizza = true;
             salad = false;
             burger = false;
+            fooditemstream = await DatabaseMethods().getFoodItem("Pizza");
             setState(() {});
           },
           child: Material(
@@ -231,11 +287,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             icecream = true;
             pizza = false;
             salad = false;
             burger = false;
+            fooditemstream = await DatabaseMethods().getFoodItem("Ice-cream");
             setState(() {});
           },
           child: Material(
@@ -255,11 +312,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             icecream = false;
             pizza = false;
             salad = true;
             burger = false;
+            fooditemstream = await DatabaseMethods().getFoodItem("Salad");
             setState(() {});
           },
           child: Material(
@@ -279,11 +337,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             icecream = false;
             pizza = false;
             salad = false;
             burger = true;
+            fooditemstream = await DatabaseMethods().getFoodItem("Burger");
             setState(() {});
           },
           child: Material(
