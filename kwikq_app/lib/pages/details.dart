@@ -133,30 +133,7 @@ class _DetailsState extends State<Details> {
             SizedBox(
               height: 30.0,
             ),
-            Row(
-              children: [
-                Text(
-                  "Delivery Time",
-                  style: GoogleFonts.poppins(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  width: 25.0,
-                ),
-                Icon(
-                  Icons.alarm,
-                  color: Colors.black54,
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  "30 min",
-                  style: GoogleFonts.poppins(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
+            
             Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 40.0),
@@ -180,19 +157,25 @@ class _DetailsState extends State<Details> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Map<String, dynamic> addFoodtoCart = {
-                        "Name": widget.name,
-                        "Quantity": a.toString(),
-                        "Total": total.toString(),
-                        "Image": widget.image
-                      };
-                      await DatabaseMethods().addFoodToCart(addFoodtoCart, id!);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.orangeAccent,
-                          content: Text(
-                            "Food Added to Cart",
-                            style: TextStyle(fontSize: 18.0),
-                          )));
+                      try {
+                        Map<String, dynamic> addFoodtoCart = {
+                          "Name": widget.name,
+                          "Quantity": a.toString(),
+                          "Total": total.toString(),
+                          "Image": widget.image
+                        };
+                        await DatabaseMethods()
+                            .addFoodToCart(addFoodtoCart, id!);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.orangeAccent,
+                            content: Text(
+                              "Food Added to Cart",
+                              style: TextStyle(fontSize: 18.0),
+                            )));
+                      } catch (e) {
+                        print(e.toString());
+                        // Show error message if needed
+                      }
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width / 2,

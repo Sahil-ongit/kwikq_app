@@ -32,5 +32,10 @@ class DatabaseMethods {
         .add(userInFoMap);
   }
 
- 
+  UpdateUserwallet(String id, String amount) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .update({"Waller": amount});
+  }
 }
