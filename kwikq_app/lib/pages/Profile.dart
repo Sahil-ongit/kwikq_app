@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:kwikq_app/pages/login.dart';
 import 'package:kwikq_app/services/auth.dart';
 import 'package:kwikq_app/services/shared_pref.dart';
 import 'package:random_string/random_string.dart';
@@ -16,12 +19,15 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final user = FirebaseAuth.instance.currentUser!;
+
   String? profile, name, email;
   
   getthesharedpref() async {
   
     name = await SharedPreferenceHelper().getUserName();
     email = await SharedPreferenceHelper().getUserEmail();
+    print(email);
     setState(() {});
   }
 
@@ -158,11 +164,12 @@ class _ProfileState extends State<Profile> {
                                 fontWeight: FontWeight.w600),
                           ),
                           Text(
-                           email!,
+                          user.email!,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w600),
+                                
                           )
                         ],
                       )
@@ -217,8 +224,15 @@ class _ProfileState extends State<Profile> {
               height: 30.0,
             ),
             GestureDetector(
-              onTap: (){
-                AuthMethods().deleteuser();
+              onTap: ()async{
+                await Get.put(AuthMethods()).deleteuser();
+                Get.offAll(()=> const LogIn());
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.orangeAccent,
+            content: Text(
+              "Account Deleted",
+              style: TextStyle(fontSize: 18.0, color: Colors.black),
+            )));
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -264,8 +278,15 @@ class _ProfileState extends State<Profile> {
               height: 30.0,
             ),
             GestureDetector(
-              onTap: (){
-                AuthMethods().SignOut();
+              onTap: ()async{  
+                await Get.put(AuthMethods()).SignOut();
+                Get.offAll(()=> const LogIn());
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.orangeAccent,
+            content: Text(
+              "Logged Out",
+              style: TextStyle(fontSize: 18.0, color: Colors.black),
+            )));
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),

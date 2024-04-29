@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kwikq_app/services/database.dart';
+import 'package:kwikq_app/services/firestore_service.dart';
 import 'package:kwikq_app/services/shared_pref.dart';
 
 class Order extends StatefulWidget {
@@ -15,40 +15,36 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
-String? id, wallet;
-int total=0, amount2=0;
+  String? id, wallet;
+  int total = 0, amount2 = 0;
 
-void startTimer(){
-  Timer(Duration(seconds: 3), () { 
-    amount2=total;
-    setState(() {
-      
+  void startTimer() {
+    Timer(Duration(seconds: 3), () {
+      amount2 = total;
+      setState(() {});
     });
-  });
-}
+  }
 
-getthesharedpref()async{
-id= await SharedPreferenceHelper().getUserId();
-wallet= await SharedPreferenceHelper().getUserWallet();
-setState(() {
-  
-});
-}
+  getthesharedpref() async {
+    id = await SharedPreferenceHelper().getUserId();
+    wallet = await SharedPreferenceHelper().getUserWallet();
+    setState(() {});
+  }
 
-ontheload()async{
-await getthesharedpref();
-foodStream= await DatabaseMethods().getFoodCart(id!);
-setState(() {
-  
-});
-}
+  ontheload() async {
+    await getthesharedpref();
+    foodStream = await DatabaseMethods().getFoodCart(id!);
+    setState(() {});
+  }
 
-@override
+  @override
   void initState() {
     ontheload();
     startTimer();
     super.initState();
   }
+
+  void removeFromCart(){}
 
   Stream? foodStream;
 
@@ -64,9 +60,10 @@ setState(() {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
-                    total= total+ int.parse(ds["Total"]);
+                    total = total + int.parse(ds["Total"]);
                     return Container(
-                      margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                      margin: EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 10.0),
                       child: Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(10),
@@ -91,27 +88,44 @@ setState(() {
                                   borderRadius: BorderRadius.circular(60),
                                   child: Image.network(
                                     ds["Image"],
-                                    height: 90,
-                                    width: 90,
+                                    height: 55,
+                                    width: 55,
                                     fit: BoxFit.cover,
                                   )),
                               SizedBox(
-                                width: 20.0,
+                                width: 10.0,
                               ),
                               Column(
                                 children: [
                                   Text(
                                     ds["Name"],
                                     style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.0400,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                  "\$"+ ds["Total"],
+                                    "\₹" + ds["Total"],
                                     style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                                  )
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.0400,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ],
-                              )
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              GestureDetector(
+                                  onTap: () {removeFromCart();
+                                    FireStoreServices.deleteDocument(
+                                        ds[index].id);
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                  ))
                             ],
                           ),
                         ),
@@ -138,14 +152,14 @@ setState(() {
                         child: Text(
                       "Food Cart",
                       style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     )))),
             SizedBox(
               height: 20.0,
             ),
             Container(
-              height: MediaQuery.of(context).size.height/2,
-              child: foodCart()),
+                height: MediaQuery.of(context).size.height / 2,
+                child: foodCart()),
             Spacer(),
             Divider(),
             Padding(
@@ -156,12 +170,12 @@ setState(() {
                   Text(
                     "Total Price",
                     style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-               "\$"+ total.toString(),
+                    "\₹" + total.toString(),
                     style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -170,16 +184,19 @@ setState(() {
               height: 20.0,
             ),
             GestureDetector(
-              onTap: ()async{
-int amount= int.parse(wallet!)-amount2;
-await DatabaseMethods().UpdateUserwallet(id!, amount.toString());
-await SharedPreferenceHelper().saveUserWallet(amount.toString());
+              onTap: () async {
+                int amount = int.parse(wallet!) - amount2;
+                await DatabaseMethods()
+                    .UpdateUserwallet(id!, amount.toString());
+                await SharedPreferenceHelper()
+                    .saveUserWallet(amount.toString());
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10)),
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
                 child: Center(
                     child: Text(

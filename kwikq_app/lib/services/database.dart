@@ -36,6 +36,9 @@ class DatabaseMethods {
     return await FirebaseFirestore.instance
         .collection("users")
         .doc(id)
-        .update({"Waller": amount});
+        .update({"Wallet": amount});
   }
+
+ 
 }
+

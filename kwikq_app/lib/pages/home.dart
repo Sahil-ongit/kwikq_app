@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool icecream = false, pizza = false, salad = false, burger = false;
+  
 
   Stream? fooditemstream;
   ontheload() async {
@@ -29,83 +30,6 @@ class _HomeState extends State<Home> {
   void initState() {
     ontheload();
     super.initState();
-  }
-
-  Widget allItems() {
-    return StreamBuilder(
-      stream: fooditemstream,
-      builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: snapshot.data.docs.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Details(
-                                detail: ds["Detail"],
-                                image: ds["Image"],
-                                name: ds["Name"],
-                                price: ds["Price"]),
-                          ));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(4),
-                      child: Material(
-                        elevation: 5.0,
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          padding: EdgeInsets.all(14),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(
-                                    ds["Image"],
-                                    height: 150,
-                                    width: 150,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Text(
-                                  ds["Name"],
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
-                                  "Fresh and Healthy",
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey),
-                                ),
-                                Text(
-                                  "\$" + ds["Price"],
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ]),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              )
-            : CircularProgressIndicator();
-      },
-    );
   }
 
   Widget allItemsVertically() {
@@ -177,7 +101,7 @@ class _HomeState extends State<Home> {
                                     Container(
                                       width:
                                           MediaQuery.of(context).size.width / 2,
-                                      child: Text("\$" + ds["Price"],
+                                      child: Text("\₹" + ds["Price"],
                                           style: GoogleFonts.poppins(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold)),
@@ -251,9 +175,9 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         height: 15,
                       ),
-                      Container(height: 270, child: allItems()),
+                   
                       SizedBox(height: 9),
-                      Container(height: 270, child: allItemsVertically()),
+                      Container(height: 520, child: allItemsVertically()),
                     ]))));
   }
 

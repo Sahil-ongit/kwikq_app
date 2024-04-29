@@ -65,7 +65,7 @@ class _DetailsState extends State<Details> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: [     
                     Text(
                       widget.name,
                       style: GoogleFonts.poppins(
@@ -149,7 +149,7 @@ class _DetailsState extends State<Details> {
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "\$" + total.toString(),
+                        "\₹" + total.toString(),
                         style: GoogleFonts.poppins(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )

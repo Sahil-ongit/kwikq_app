@@ -13,6 +13,8 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  
+
   String email = "", password = "";
 
   final _formkey = GlobalKey<FormState>();
@@ -20,10 +22,11 @@ class _LogInState extends State<LogIn> {
   TextEditingController useremailcontroller = new TextEditingController();
   TextEditingController userpasswordcontroller = new TextEditingController();
 
-  userLogin() async {
+  Future userLogin() async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: useremailcontroller.text.trim(),
+          password: userpasswordcontroller.text.trim());
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => BottomNav()));
     } on FirebaseAuthException catch (e) {
@@ -43,6 +46,14 @@ class _LogInState extends State<LogIn> {
       }
     }
   }
+  
+@override
+  void dispose() {
+    useremailcontroller.dispose();
+    userpasswordcontroller.dispose();
+    super.dispose();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
