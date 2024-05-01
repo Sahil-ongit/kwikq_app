@@ -35,7 +35,7 @@ class _CartState extends State<Cart> {
 
   getthesharedpref() async {
     id = await SharedPreferenceHelper().getUserId();
-    orderId = (await SharedPreferenceHelper().getOrder())!;
+    
     setState(() {});
   }
 
@@ -44,6 +44,7 @@ class _CartState extends State<Cart> {
     foodStream = await DatabaseMethods().getFoodCart(id!);
     setState(() {});
   }
+
 
   @override
   void initState() {
@@ -185,7 +186,7 @@ class _CartState extends State<Cart> {
                                     style: GoogleFonts.poppins(
                                         fontSize:
                                             MediaQuery.of(context).size.width *
-                                                0.0300,
+                                                0.0200,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
@@ -193,7 +194,7 @@ class _CartState extends State<Cart> {
                                     style: GoogleFonts.poppins(
                                         fontSize:
                                             MediaQuery.of(context).size.width *
-                                                0.0400,
+                                                0.0300,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -270,7 +271,7 @@ class _CartState extends State<Cart> {
                 var options = {
                   'key': 'rzp_test_TUV5Kd9YTRyDBt',
                   'amount': amount2 * 100,
-                  'name': 'Acme Corp.',
+                  'name': 'Kwikq',
                   'description': 'Fine T-Shirt',
                   'prefill': {
                     'contact': '9207339522',
