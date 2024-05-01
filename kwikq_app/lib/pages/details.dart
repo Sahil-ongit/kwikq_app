@@ -4,12 +4,13 @@ import 'package:kwikq_app/services/database.dart';
 import 'package:kwikq_app/services/shared_pref.dart';
 
 class Details extends StatefulWidget {
-  String image, name, detail, price;
+  String image, name, detail, price,id;
   Details(
       {required this.detail,
       required this.image,
       required this.name,
-      required this.price});
+      required this.price,
+      required this.id});
 
   @override
   State<Details> createState() => _DetailsState();
@@ -69,7 +70,8 @@ class _DetailsState extends State<Details> {
                     Text(
                       widget.name,
                       style: GoogleFonts.poppins(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize:  MediaQuery.of(context).size.width *
+                                                0.03500, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -159,6 +161,7 @@ class _DetailsState extends State<Details> {
                     onTap: () async {
                       try {
                         Map<String, dynamic> addFoodtoCart = {
+                          "Id":id,
                           "Name": widget.name,
                           "Quantity": a.toString(),
                           "Total": total.toString(),

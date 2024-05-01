@@ -65,6 +65,7 @@ class _AddFoodState extends State<AddFood> {
 
       // Create a map containing the item details
       Map<String, dynamic> addItem = {
+        "Id":addId,
         "Image": downloadUrl,
         "Name": namecontroller.text,
         "Price": pricecontroller.text,

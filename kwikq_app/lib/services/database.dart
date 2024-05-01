@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
@@ -38,6 +40,18 @@ class DatabaseMethods {
         .doc(id)
         .update({"Wallet": amount});
   }
+
+  Future<void> deleteFoodCart(String id) async {
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(id)
+      .collection("Cart")
+      .get();
+
+  querySnapshot.docs.forEach((doc) async {
+    await doc.reference.delete();
+  });
+}
 
  
 }

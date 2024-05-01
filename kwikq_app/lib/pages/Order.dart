@@ -44,7 +44,7 @@ class _OrderState extends State<Order> {
     super.initState();
   }
 
-  void removeFromCart(){}
+  void removeFromCart() {}
 
   Stream? foodStream;
 
@@ -102,7 +102,7 @@ class _OrderState extends State<Order> {
                                     style: GoogleFonts.poppins(
                                         fontSize:
                                             MediaQuery.of(context).size.width *
-                                                0.0400,
+                                                0.0300,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
@@ -118,14 +118,12 @@ class _OrderState extends State<Order> {
                               SizedBox(
                                 width: 20,
                               ),
-                              GestureDetector(
-                                  onTap: () {removeFromCart();
-                                    FireStoreServices.deleteDocument(
-                                        ds[index].id);
-                                  },
-                                  child: Icon(
-                                    Icons.delete,
-                                  ))
+                              GestureDetector(onTap: () async{
+                                await DatabaseMethods().deleteFoodCart(ds["Id"]);
+                                
+                              },
+                                child: Icon(Icons.delete),
+                              )
                             ],
                           ),
                         ),

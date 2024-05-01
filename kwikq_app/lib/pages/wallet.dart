@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:kwikq_app/pages/bottomnav.dart';
 import 'package:kwikq_app/services/shared_pref.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -58,6 +59,7 @@ void _handleExternalWallet(ExternalWalletResponse response) {
 }
 
   Map<String, dynamic>? paymentIntent;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +112,7 @@ void _handleExternalWallet(ExternalWalletResponse response) {
                               height: 5.0,
                             ),
                             Text(
-                              "\$" + wallet!,
+                              "\₹" + wallet!,
                               style: GoogleFonts.poppins(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             )
@@ -146,7 +148,7 @@ void _handleExternalWallet(ExternalWalletResponse response) {
                               border: Border.all(color: Color(0xFFE9E2E2)),
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            "\$" + "100",
+                            "\₹" + "100",
                             style: GoogleFonts.poppins(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -162,7 +164,7 @@ void _handleExternalWallet(ExternalWalletResponse response) {
                               border: Border.all(color: Color(0xFFE9E2E2)),
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            "\$" + "500",
+                            "\₹" + "500",
                             style: GoogleFonts.poppins(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -178,7 +180,7 @@ void _handleExternalWallet(ExternalWalletResponse response) {
                               border: Border.all(color: Color(0xFFE9E2E2)),
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            "\$" + "1000",
+                            "\₹" + "1000",
                             style: GoogleFonts.poppins(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -194,7 +196,7 @@ void _handleExternalWallet(ExternalWalletResponse response) {
                               border: Border.all(color: Color(0xFFE9E2E2)),
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            "\$" + "2000",
+                            "\₹" + "2000",
                             style: GoogleFonts.poppins(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -207,7 +209,24 @@ void _handleExternalWallet(ExternalWalletResponse response) {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //  openEdit();
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                          title: Text('Alert'),
+                          content: Text('Are You Sure?'),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () {},
+                              child: Text('Yes'),                                
+                            ),
+                            MaterialButton(
+                              onPressed: () {
+                               Navigator.pop(context);
+                              },
+                              child: Text('No'),                                
+                            ),
+                          ],
+                        );
+                      },);
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 20.0),

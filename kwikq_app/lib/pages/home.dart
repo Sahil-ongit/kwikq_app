@@ -50,6 +50,7 @@ class _HomeState extends State<Home> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Details(
+                                id: ds["Id"],
                                 detail: ds["Detail"],
                                 image: ds["Image"],
                                 name: ds["Name"],
@@ -62,7 +63,7 @@ class _HomeState extends State<Home> {
                         elevation: 5,
                         borderRadius: BorderRadius.circular(20),
                         child: Container(
-                          padding: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(1),
                           child: SingleChildScrollView(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +87,8 @@ class _HomeState extends State<Home> {
                                           MediaQuery.of(context).size.width / 2,
                                       child: Text(ds["Name"],
                                           style: GoogleFonts.poppins(
-                                              fontSize: 20,
+                                              fontSize:  MediaQuery.of(context).size.width *
+                                                0.0500,
                                               fontWeight: FontWeight.bold)),
                                     ),
                                     Container(
