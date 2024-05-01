@@ -1,10 +1,10 @@
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:kwikq_app/pages/Order.dart';
+import 'package:kwikq_app/pages/Cart.dart';
 import 'package:kwikq_app/pages/Profile.dart';
 import 'package:kwikq_app/pages/home.dart';
-import 'package:kwikq_app/pages/wallet.dart';
+
 
 
 class BottomNav extends StatefulWidget {
@@ -21,16 +21,15 @@ class _BottomNavState extends State<BottomNav> {
   late Widget currentPage;
   late Home homepage;
   late Profile profile;
-  late Order order;
-  late Wallet wallet;
+  late Cart cart;
+ 
 
   @override
   void initState() {
     homepage = Home();
-    order = Order();
+    cart = Cart();
     profile = Profile();
-    wallet = Wallet();
-    pages = [homepage, order, wallet, profile];
+    pages = [homepage, cart, profile];
     super.initState();
   }
 
@@ -56,10 +55,7 @@ class _BottomNavState extends State<BottomNav> {
               Icons.shopping_bag_outlined,
               color: Colors.white,
             ),
-            Icon(
-              Icons.wallet_outlined,
-              color: Colors.white,
-            ),
+
             Icon(
               Icons.person_outline,
               color: Colors.white,

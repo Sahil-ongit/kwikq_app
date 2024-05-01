@@ -91,15 +91,7 @@ class _HomeState extends State<Home> {
                                                 0.0500,
                                               fontWeight: FontWeight.bold)),
                                     ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text("Honey goot Cheese",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 13,
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
+                                    
                                     Container(
                                       width:
                                           MediaQuery.of(context).size.width / 2,
@@ -139,17 +131,7 @@ class _HomeState extends State<Home> {
                           Text("Hello User,",
                               style: GoogleFonts.poppins(
                                   fontSize: 20, fontWeight: FontWeight.bold)),
-                          Container(
-                            margin: EdgeInsets.only(right: 20),
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(4)),
-                            child: Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                            ),
-                          )
+                        
                         ],
                       ),
                       SizedBox(

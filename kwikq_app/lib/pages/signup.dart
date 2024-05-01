@@ -32,18 +32,16 @@ class _SignUpState extends State<SignUp> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
-            String Id = randomAlphaNumeric(10);
+        String Id = randomAlphaNumeric(10);
         Map<String, dynamic> addUserInfo = {
           "Name": namecontroller.text,
           "Email": mailcontroller.text,
-          "Wallet": "0",
           "Id": Id,
         };
-             await DatabaseMethods().addUserDetail(addUserInfo, Id);
-            await SharedPreferenceHelper().saveUserName(namecontroller.text);
-             await SharedPreferenceHelper().saveUserEmail(mailcontroller.text);
-             await SharedPreferenceHelper().saveUserWallet('0');
-             await SharedPreferenceHelper().saveUserId(Id);
+        await DatabaseMethods().addUserDetail(addUserInfo, Id);
+        await SharedPreferenceHelper().saveUserName(namecontroller.text);
+        await SharedPreferenceHelper().saveUserEmail(mailcontroller.text);
+        await SharedPreferenceHelper().saveUserId(Id);
 
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context,

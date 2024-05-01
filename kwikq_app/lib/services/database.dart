@@ -34,11 +34,12 @@ class DatabaseMethods {
         .add(userInFoMap);
   }
 
-  UpdateUserwallet(String id, String amount) async {
+  Future ConfirmOrder(Map<String, dynamic> userInFoMap, String id) async {
     return await FirebaseFirestore.instance
-        .collection("users")
+        .collection('users')
         .doc(id)
-        .update({"Wallet": amount});
+        .collection("Orders")
+        .add(userInFoMap);
   }
 
   Future<void> deleteFoodCart(String id) async {

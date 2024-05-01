@@ -3,23 +3,31 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kwikq_app/pages/Order_confirm_page.dart';
 import 'package:kwikq_app/services/database.dart';
+import 'package:kwikq_app/services/firebase_const.dart';
 import 'package:kwikq_app/services/firestore_service.dart';
 import 'package:kwikq_app/services/shared_pref.dart';
+import 'package:kwikq_app/widgets/app_constants.dart';
+import 'package:random_string/random_string.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-class Order extends StatefulWidget {
-  const Order({super.key});
+class Cart extends StatefulWidget {
+  const Cart({super.key});
 
   @override
-  State<Order> createState() => _OrderState();
+  State<Cart> createState() => _CartState();
 }
 
-class _OrderState extends State<Order> {
+class _CartState extends State<Cart> {
+  final _razorpay = Razorpay();
   String? id, wallet;
   int total = 0, amount2 = 0;
+  String orderId = randomAlphaNumeric(10);
+  
 
   void startTimer() {
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 1), () {
       amount2 = total;
       setState(() {});
     });
@@ -27,7 +35,7 @@ class _OrderState extends State<Order> {
 
   getthesharedpref() async {
     id = await SharedPreferenceHelper().getUserId();
-    wallet = await SharedPreferenceHelper().getUserWallet();
+    orderId = (await SharedPreferenceHelper().getOrder())!;
     setState(() {});
   }
 
@@ -39,12 +47,87 @@ class _OrderState extends State<Order> {
 
   @override
   void initState() {
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     ontheload();
     startTimer();
     super.initState();
   }
 
-  void removeFromCart() {}
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print(
+        'Payment Success : ${response.paymentId}  ${response.orderId}  ${response.signature}');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Success"),
+        content: Text(
+            'Payment Id : ${response.paymentId}  ${response.orderId}  ${response.signature}'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'))
+        ],
+      ),
+    );
+    FireStoreService.saveOrder({
+      'userId': id,
+      'items':"", // This should be a list of items the user purchased
+      'total': total,
+      'paymentId': response.paymentId,
+      'orderId': response.orderId,
+      'date': Timestamp.now(), // To timestamp the order
+    }).then((value) {
+      // Navigate to order confirmation page
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  OrderConfirmationPage(orderId: ordersCollection)));
+    }).catchError((error) {
+      print("Failed to add order: $error");
+    });
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print('Payment Success : ${response.code}  ${response.message}');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Error"),
+        content:
+            Text('Code : ${response.code} -Message : ${response.message} '),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'))
+        ],
+      ),
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    print('Payment Success : ${response.walletName}');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("External Wallet"),
+        content: Text('Wallet Name : ${response.walletName} '),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'))
+        ],
+      ),
+    );
+  }
 
   Stream? foodStream;
 
@@ -118,10 +201,11 @@ class _OrderState extends State<Order> {
                               SizedBox(
                                 width: 20,
                               ),
-                              GestureDetector(onTap: () async{
-                                await DatabaseMethods().deleteFoodCart(ds["Id"]);
-                                
-                              },
+                              GestureDetector(
+                                onTap: () async {
+                                  await DatabaseMethods()
+                                      .deleteFoodCart(ds["Id"]);
+                                },
                                 child: Icon(Icons.delete),
                               )
                             ],
@@ -182,12 +266,23 @@ class _OrderState extends State<Order> {
               height: 20.0,
             ),
             GestureDetector(
-              onTap: () async {
-                int amount = int.parse(wallet!) - amount2;
-                await DatabaseMethods()
-                    .UpdateUserwallet(id!, amount.toString());
-                await SharedPreferenceHelper()
-                    .saveUserWallet(amount.toString());
+              onTap: () {
+                var options = {
+                  'key': 'rzp_test_TUV5Kd9YTRyDBt',
+                  'amount': amount2 * 100,
+                  'name': 'Acme Corp.',
+                  'description': 'Fine T-Shirt',
+                  'prefill': {
+                    'contact': '9207339522',
+                    'email': 'kwikq4444@gmaail.com'
+                  }
+                };
+                try {
+                  print(total);
+                  _razorpay.open(options);
+                } catch (e) {
+                  debugPrint("Failed to open Razorpay: ${e.toString()}");
+                }
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
