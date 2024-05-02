@@ -49,10 +49,14 @@ class _DetailsState extends State<Details> {
                 onTap: () {
                   Navigator.pop(context);
                 },
+                
                 child: Icon(
                   Icons.arrow_back_ios_new_outlined,
                   color: Colors.black,
                 )),
+                 SizedBox(
+              height: 15.0,
+            ),
             Image.network(
               widget.image,
               width: MediaQuery.of(context).size.width,

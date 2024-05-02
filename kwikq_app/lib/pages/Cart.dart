@@ -24,7 +24,6 @@ class _CartState extends State<Cart> {
   String? id, wallet;
   int total = 0, amount2 = 0;
   String orderId = randomAlphaNumeric(10);
-  
 
   void startTimer() {
     Timer(Duration(seconds: 1), () {
@@ -35,7 +34,7 @@ class _CartState extends State<Cart> {
 
   getthesharedpref() async {
     id = await SharedPreferenceHelper().getUserId();
-    
+
     setState(() {});
   }
 
@@ -44,7 +43,6 @@ class _CartState extends State<Cart> {
     foodStream = await DatabaseMethods().getFoodCart(id!);
     setState(() {});
   }
-
 
   @override
   void initState() {
@@ -56,7 +54,7 @@ class _CartState extends State<Cart> {
     super.initState();
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     print(
         'Payment Success : ${response.paymentId}  ${response.orderId}  ${response.signature}');
     showDialog(
@@ -74,23 +72,37 @@ class _CartState extends State<Cart> {
         ],
       ),
     );
-    FireStoreService.saveOrder({
-      'userId': id,
-      'items':"", // This should be a list of items the user purchased
-      'total': total,
-      'paymentId': response.paymentId,
-      'orderId': response.orderId,
-      'date': Timestamp.now(), // To timestamp the order
-    }).then((value) {
+    try {
+      // Get the cart items
+      Stream<QuerySnapshot> cartItemsSnapshotStream =
+          await DatabaseMethods().getFoodCart(id!);
+      QuerySnapshot cartItemsSnapshot = await cartItemsSnapshotStream.first;
+
+      // Extract the items data and save it to Firestore
+      var itemsData = cartItemsSnapshot.docs.map((doc) => doc.data()).toList();
+      await FireStoreService.saveOrder({
+        'userId': id,
+        'items': itemsData,
+        'total': total,
+        'paymentId': response.paymentId,
+        'orderId': response.orderId,
+        'date': Timestamp.now(),
+      });
+
+      // Clear the cart after successful order
+      await DatabaseMethods().clearCart(id!);
+
       // Navigate to order confirmation page
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  OrderConfirmationPage(orderId: ordersCollection)));
-    }).catchError((error) {
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              OrderConfirmationPage(orderId: ordersCollection),
+        ),
+      );
+    } catch (error) {
       print("Failed to add order: $error");
-    });
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

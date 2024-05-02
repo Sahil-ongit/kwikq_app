@@ -43,17 +43,35 @@ class DatabaseMethods {
   }
 
   Future<void> deleteFoodCart(String id) async {
-  QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(id)
-      .collection("Cart")
-      .get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(id)
+        .collection("Cart")
+        .get();
 
-  querySnapshot.docs.forEach((doc) async {
-    await doc.reference.delete();
-  });
+    querySnapshot.docs.forEach((doc) async {
+      await doc.reference.delete();
+    });
+  }
+
+  Future<void> clearCart(String userId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection("Cart")
+              .get();
+
+      final batchDelete = FirebaseFirestore.instance.batch();
+      querySnapshot.docs.forEach((doc) {
+        batchDelete.delete(doc.reference);
+      });
+      await batchDelete.commit();
+    } catch (e) {
+      print("Error clearing cart: $e");
+      throw e; // Rethrow the error to handle it at a higher level if necessary
+    }
+  }
 }
-
- 
-}
-
