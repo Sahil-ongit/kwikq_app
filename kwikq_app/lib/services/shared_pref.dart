@@ -11,6 +11,11 @@ class SharedPreferenceHelper {
     return pref.setString(userIdKey, getUserId);
   }
 
+  Future<bool> saveOrderId(String getOrderId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.setString(userIdKey, getOrderId);
+  }
+
   Future<bool> saveUserName(String getUserName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.setString(userNameKey, getUserName);

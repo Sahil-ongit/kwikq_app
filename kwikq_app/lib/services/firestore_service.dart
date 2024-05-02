@@ -8,12 +8,16 @@ class FireStoreService {
     return FirebaseFirestore.instance.collection('orders').add(orderData);
   }
 
-  static Future<Map<String, dynamic>?> getOrderById(String orderId) async {
-    // Fetch a single order by ID
-    var doc = await FirebaseFirestore.instance
-        .collection('orders')
-        .doc(orderId)
-        .get();
-    return doc.data() as Map<String, dynamic>?;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getOrderById(
+      String orderId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> orderSnapshot =
+          await _firestore.collection('orders').doc(orderId).get();
+      return orderSnapshot;
+    } catch (e) {
+      throw Exception('Error getting order by ID: $e');
+    }
   }
 }

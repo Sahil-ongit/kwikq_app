@@ -21,9 +21,10 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   final _razorpay = Razorpay();
-  String? id, wallet;
+  // ignore: non_constant_identifier_names
+  String? id,O_id;
   int total = 0, amount2 = 0;
-  String orderId = randomAlphaNumeric(10);
+  
 
   void startTimer() {
     Timer(Duration(seconds: 1), () {
@@ -34,7 +35,7 @@ class _CartState extends State<Cart> {
 
   getthesharedpref() async {
     id = await SharedPreferenceHelper().getUserId();
-
+    O_id = await SharedPreferenceHelper().getOrder();
     setState(() {});
   }
 
@@ -85,7 +86,7 @@ class _CartState extends State<Cart> {
         'items': itemsData,
         'total': total,
         'paymentId': response.paymentId,
-        'orderId': response.orderId,
+        'orderId': randomAlphaNumeric(10),
         'date': Timestamp.now(),
       });
 

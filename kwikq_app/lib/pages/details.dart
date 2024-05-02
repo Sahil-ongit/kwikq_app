@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kwikq_app/pages/Cart.dart';
 import 'package:kwikq_app/services/database.dart';
 import 'package:kwikq_app/services/shared_pref.dart';
 
 class Details extends StatefulWidget {
-  String image, name, detail, price,id;
+  String image, name, detail, price, id;
   Details(
       {required this.detail,
       required this.image,
@@ -40,23 +41,30 @@ class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        actions: [
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Cart(),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.shopping_bag_outlined))
+            ],
+          )
+        ],
+      ),
       body: Container(
         margin: EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                
-                child: Icon(
-                  Icons.arrow_back_ios_new_outlined,
-                  color: Colors.black,
-                )),
-                 SizedBox(
-              height: 15.0,
-            ),
             Image.network(
               widget.image,
               width: MediaQuery.of(context).size.width,
@@ -70,12 +78,12 @@ class _DetailsState extends State<Details> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [     
+                  children: [
                     Text(
                       widget.name,
                       style: GoogleFonts.poppins(
-                          fontSize:  MediaQuery.of(context).size.width *
-                                                0.03500, fontWeight: FontWeight.bold),
+                          fontSize: MediaQuery.of(context).size.width * 0.03500,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -139,7 +147,6 @@ class _DetailsState extends State<Details> {
             SizedBox(
               height: 30.0,
             ),
-            
             Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 40.0),
@@ -165,7 +172,7 @@ class _DetailsState extends State<Details> {
                     onTap: () async {
                       try {
                         Map<String, dynamic> addFoodtoCart = {
-                          "Id":id,
+                          "Id": id,
                           "Name": widget.name,
                           "Quantity": a.toString(),
                           "Total": total.toString(),
